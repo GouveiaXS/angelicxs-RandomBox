@@ -10,7 +10,7 @@ end
 --- Open Boxes
 
 RegisterServerEvent('angelicxs-randombox:server:OpenBox')
-AddEventHandler('angelicxs-randombox:server:OpenBox', function(source, tier)
+AddEventHandler('angelicxs-randombox:server:OpenBox', function(source, tier, amount)
     local src = source
     math.randomseed(os.time())
     local item = randomizer(tier)
