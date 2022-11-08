@@ -167,7 +167,9 @@ end
 AddEventHandler('onResourceStop', function(resource)
     if GetCurrentResourceName() == resource then
         if DoesEntityExist(NPC) then
-            exports[Config.ThirdEyeName]:RemoveZone('GiftNPC')
+		if Config.UseThirdEye then
+            		exports[Config.ThirdEyeName]:RemoveZone('GiftNPC')
+		end
             DeleteEntity(NPC)
         end
     end
