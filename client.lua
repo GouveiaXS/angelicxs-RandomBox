@@ -49,9 +49,6 @@ CreateThread(function()
                 if Dist2 > 50 then
                     DeleteEntity(NPC)
                     PedSpawned = false
-                    if Config.UseThirdEye then
-                        exports[Config.ThirdEyeName]:RemoveZone('GiftNPC')
-                    end
                 end
             end
             Wait(2000)
@@ -68,80 +65,123 @@ RegisterNetEvent('angelicxs-randombox:SpawnNPC',function(coords,model,scenario)
     TaskStartScenarioInPlace(NPC,scenario, 0, false)
     SetModelAsNoLongerNeeded(model)
     if Config.UseThirdEye then
-        exports[Config.ThirdEyeName]:AddEntityZone('GiftNPC', NPC, {
-            name="GiftNPC",
-            debugPoly=false,
-            useZ = true
-              }, {
-              options = {
+        if Config.ThirdEyeName == 'ox_target' then
+            local ox_options = {
                 {
-                icon = Config.ThirdEyeIcon,
-                label = 'Purchase a Tier 1 Box for $'..Config.Tier1Price,
-                canInteract = function(entity)
-                    if IsPedAPlayer(entity) then return false end 
-                    if not Config.AllowTier1 then return false end
-                    return true
-                  end,
-                action = function(entity)
-                    if IsPedAPlayer(entity) then return false end
-                    TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier1Price)
-                end,
-                },     
-                {
-                icon = Config.ThirdEyeIcon,
-                label = 'Purchase a Tier 2 Box for $'..Config.Tier2Price,
-                canInteract = function(entity)
-                    if IsPedAPlayer(entity) then return false end 
-                    if not Config.AllowTier2 then return false end
-                    return true
-                  end,
-                action = function(entity)
-                    if IsPedAPlayer(entity) then return false end
-                    TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier2Price)
-                end,
-                },  
-                {
-                icon = Config.ThirdEyeIcon,
-                label = 'Purchase a Tier 3 Box for $'..Config.Tier3Price,
-                canInteract = function(entity)
-                    if IsPedAPlayer(entity) then return false end 
-                    if not Config.AllowTier3 then return false end
-                    return true
+                    icon = Config.ThirdEyeIcon,
+                    label = Config.Lang['buy_a']..'1'..Config.Lang['buy_b']..Config.Tier1Price,
+                    canInteract = function(entity)
+                        if not Config.AllowTier1 then return false end
+                        return true
                     end,
-                action = function(entity)
-                    if IsPedAPlayer(entity) then return false end
-                    TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier3Price)
-                end,
-                }, 
-                {
-                icon = Config.ThirdEyeIcon,
-                label = 'Purchase a Tier 4 Box for $'..Config.Tier4Price,
-                canInteract = function(entity)
-                    if IsPedAPlayer(entity) then return false end 
-                    if not Config.AllowTier4 then return false end
-                    return true
+                    onSelect = function(entity)
+                        TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier1Price)
                     end,
-                action = function(entity)
-                    if IsPedAPlayer(entity) then return false end
-                    TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier4Price)
-                end,
-                }, 
-                {
-                icon = Config.ThirdEyeIcon,
-                label = 'Purchase a Tier 5 Box for $'..Config.Tier5Price,
-                canInteract = function(entity)
-                    if IsPedAPlayer(entity) then return false end 
-                    if not Config.AllowTier5 then return false end
-                    return true
+                }, {
+                    icon = Config.ThirdEyeIcon,
+                    label = Config.Lang['buy_a']..'2'..Config.Lang['buy_b']..Config.Tier2Price,
+                    canInteract = function(entity)
+                        if not Config.AllowTier2 then return false end
+                        return true
                     end,
-                action = function(entity)
-                    if IsPedAPlayer(entity) then return false end
-                    TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier5Price)
-                end,
+                    onSelect = function(entity)
+                        TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier2Price)
+                    end,
+                }, {
+                    icon = Config.ThirdEyeIcon,
+                    label = Config.Lang['buy_a']..'3'..Config.Lang['buy_b']..Config.Tier3Price,
+                    canInteract = function(entity)
+                        if not Config.AllowTier3 then return false end
+                        return true
+                    end,
+                    onSelect = function(entity)
+                        TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier3Price)
+                    end,
+                }, {
+                    icon = Config.ThirdEyeIcon,
+                    label = Config.Lang['buy_a']..'4'..Config.Lang['buy_b']..Config.Tier4Price,
+                    canInteract = function(entity)
+                        if not Config.AllowTier4 then return false end
+                        return true
+                    end,
+                    onSelect = function(entity)
+                        TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier4Price)
+                    end,
+                }, {
+                    icon = Config.ThirdEyeIcon,
+                    label = Config.Lang['buy_a']..'5'..Config.Lang['buy_b']..Config.Tier5Price,
+                    canInteract = function(entity)
+                        if not Config.AllowTier5 then return false end
+                        return true
+                    end,
+                    onSelect = function(entity)
+                        TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier5Price)
+                    end,
                 }, 
-              },
-            distance = 2
-        })        
+            }
+            exports.ox_target:addLocalEntity(NPC, ox_options)
+        else
+            exports[Config.ThirdEyeName]:AddEntityZone('GiftNPC', NPC, {
+                name="GiftNPC",
+                debugPoly=false,
+                useZ = true
+                }, {
+                options = {
+                    {
+                        icon = Config.ThirdEyeIcon,
+                        label = Config.Lang['buy_a']..'1'..Config.Lang['buy_b']..Config.Tier1Price,
+                        canInteract = function(entity)
+                            if not Config.AllowTier1 then return false end
+                            return true
+                        end,
+                        action = function(entity)
+                            TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier1Price)
+                        end,
+                    }, {
+                        icon = Config.ThirdEyeIcon,
+                        label = Config.Lang['buy_a']..'2'..Config.Lang['buy_b']..Config.Tier2Price,
+                        canInteract = function(entity)
+                            if not Config.AllowTier2 then return false end
+                            return true
+                        end,
+                        action = function(entity)
+                            TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier2Price)
+                        end,
+                    }, {
+                        icon = Config.ThirdEyeIcon,
+                        label = Config.Lang['buy_a']..'3'..Config.Lang['buy_b']..Config.Tier3Price,
+                        canInteract = function(entity)
+                            if not Config.AllowTier3 then return false end
+                            return true
+                        end,
+                        action = function(entity)
+                            TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier3Price)
+                        end,
+                    }, {
+                        icon = Config.ThirdEyeIcon,
+                        label = Config.Lang['buy_a']..'4'..Config.Lang['buy_b']..Config.Tier4Price,
+                        canInteract = function(entity)
+                            if not Config.AllowTier4 then return false end
+                            return true
+                        end,
+                        action = function(entity)
+                            TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier4Price)
+                        end,
+                    }, {
+                        icon = Config.ThirdEyeIcon,
+                        label = Config.Lang['buy_a']..'5'..Config.Lang['buy_b']..Config.Tier5Price,
+                        canInteract = function(entity)
+                            if not Config.AllowTier5 then return false end
+                            return true
+                        end,
+                        action = function(entity)
+                            TriggerServerEvent('angelicxs-randombox:server:GetMoney', Config.Tier5Price)
+                        end,
+                    }, 
+                },
+                distance = 2
+            })        
+        end
     end
 end)
 
@@ -161,9 +201,6 @@ end
 AddEventHandler('onResourceStop', function(resource)
     if GetCurrentResourceName() == resource then
         if DoesEntityExist(NPC) then
-		if Config.UseThirdEye then
-            		exports[Config.ThirdEyeName]:RemoveZone('GiftNPC')
-		end
             DeleteEntity(NPC)
         end
     end
