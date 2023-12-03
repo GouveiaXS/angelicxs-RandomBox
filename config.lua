@@ -104,4 +104,6 @@ Config.Lang = {
 	['nofunds'] = 'You do not have enough cash to purchase a box!',
 	['purchase'] = 'You have purchased a mystery box!',
 	['used'] = 'You are opening a mystery box!',
+	['buy_a'] = 'Purchase a Tier ',
+        ['buy_b'] = ' mystery box for $',
 }
